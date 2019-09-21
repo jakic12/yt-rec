@@ -47,9 +47,14 @@ app.get('/getNetwork/:filename', async (req, res) => {
     try{
         if(!req.params.filename)
             throw new Error(`parameter filename required`)
-        
-        const data = await videoNetManager.getVideoNetworkFromFilename(req.params.filename)
-        res.send({data:data.serialize()})
+
+        if(req.params.filename == `all`){
+            const data = await videoNetManager.getAllVideoNetworks()
+            res.send({data:data.serialize()})
+        }else{
+            const data = await videoNetManager.getVideoNetworkFromFilename(req.params.filename)
+            res.send({data:data.serialize()})
+        }
     }catch(err){
         console.error(err)
         res.send({err})

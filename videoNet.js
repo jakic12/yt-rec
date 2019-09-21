@@ -50,6 +50,35 @@ function getVideoNetworkFromFilename(filename){
         })
     });
 }
+async function getAllVideoNetworks(){
+    return new Promise((resolve, reject) => {
+        let videoNetPromiseArr = [];
+
+        listVideoNetworks().then(v => {
+            v.forEach(file => {
+                videoNetPromiseArr.push(new Promise((resolve1, reject1) => {
+                    fs.readFile(`${networkFolder}/${file}`, (err, data) => {
+                        if(err) reject1(err)
+
+                        try{
+                            resolve1(new videoNet().deserialize(JSON.parse(data)))
+                        }catch(e){
+                            reject1(e)
+                        }
+                    })
+                }))
+            })
+
+            Promise.all(videoNetPromiseArr).then(videoNetArray => {
+                let videoOut = new videoNet(videoNetArray[0].startVideo);
+                for(const videoNet1 of videoNetArray){
+                    videoOut.addVideoNet(videoNet1)
+                }
+                resolve(videoOut)
+            }).catch(e => {reject(e)})
+        })
+    });
+}
 
 
 function listVideoNetworks(){
@@ -76,10 +105,20 @@ function videoNet(startVideo, videos = [], idToIndex = {}, indexToId = [], conne
                 console.log(parentVideo, `->`, recommendation.id)
                 this.videos.push(recommendation);
                 this.idToIndex[recommendation.id] = videos.length-1;
-                this.indexToId[videos.length-1] = recommendation.id;
+                //this.indexToId[videos.length-1] = recommendation.id;
                 this.connections.push({parent:parentVideo, child:recommendation.id})
             }
         }
+    }
+
+    this.addVideoNet = (videoNet1) => {
+        for(const video of videoNet1.videos){
+            if(!this.idToIndex[video.id]){
+                this.videos.push(video)
+                this.idToIndex[video.id] = this.videos.length-1;
+            }
+        }
+        this.connections = this.connections.concat(videoNet1.connections)
     }
 
     this.serialize = () => {
@@ -96,5 +135,6 @@ module.exports = {
     getNewVideoNetwork,
     getVideoNetwork,
     listVideoNetworks,
-    getVideoNetworkFromFilename
+    getVideoNetworkFromFilename,
+    getAllVideoNetworks
 }

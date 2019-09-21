@@ -23,7 +23,7 @@
         fetch(`/listNetworks`)
             .then(e => e.json())
             .then((v) => {
-                fetch(`/getNetwork/${v[0]}`)
+                fetch(/*`/getNetwork/${v[0]}`*/ `/getNetwork/all`)
                     .then(e1 => e1.json())
                     .then(data => {
                         let graphData = {
