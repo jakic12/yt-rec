@@ -22,6 +22,7 @@
         fetch(`static.json`)
             .then(e1 => e1.json())
             .then(data => {
+                data = {data}
                 let graphData = {
                     nodes:data.data.videos.map(e => ({
                         id:e.id,
