@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>3d youtube recommended graph</title>
+    <style>
+        html, body{
+            height:100%;
+        }
+
+        *{
+            margin:0;
+        }
+    </style>
+</head>
+<body>
+    <div id="main" style="width:100%; height:100%; overflow:hidden"></div>
+    <script src="//unpkg.com/three"></script>
+    <script src="//unpkg.com/3d-force-graph"></script>
+    <script>
+        const image=true;
+        fetch(`static.js`)
+            .then(e1 => e1.json())
+            .then(data => {
+                let graphData = {
+                    nodes:data.data.videos.map(e => ({
+                        id:e.id,
+                        name:e.title,
+                        value:1,
+                        img:"http://cors-anywhere.herokuapp.com/" + ((e.thumbnails)?e.thumbnails.medium.url:`https://i.ibb.co/H4NzBYT/no-image-icon-5.gif`)
+                    })),
+                    links:data.data.connections.map(e => ({source:e.parent, target:e.child}))
+                }
+
+                if(!image)
+                    ForceGraph3D()(document.getElementById("main")).graphData(graphData)
+                else
+                ForceGraph3D()(document.getElementById("main"))
+                    .nodeThreeObject(({ img }) => {
+                      // use a sphere as a drag handle
+                      const obj = new THREE.Mesh(
+                        new THREE.SphereGeometry(7),
+                        new THREE.MeshBasicMaterial({ depthWrite: false, transparent: true, opacity: 0 })
+                      );
+                      // add img sprite as child
+                      const imgTexture = new THREE.TextureLoader().load(img);
+                      const material = new THREE.SpriteMaterial({ map: imgTexture });
+                      const sprite = new THREE.Sprite(material);
+                      sprite.scale.set(20, 20);
+                      obj.add(sprite);
+                      return obj;
+                    })
+                    .graphData(graphData);
+            }).catch(console.error)
+    </script>
+</body>
+</html>
