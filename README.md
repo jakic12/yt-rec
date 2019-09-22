@@ -8,8 +8,9 @@ Build a graph from recursively getting recommended videos, making a interconnect
 # setup locally
 1. clone the repo
 2. `npm i`
+4. `node index.js`
 #### if you want to generate your own network files:
-3. set up the enviroment variables
+4. set up the enviroment variables
   Make a `.env` file in the root folder and assign this variables
   ```env
   CREDS_PATH="<folder with your oaut client secret>" //to store the oauth token once aquired
@@ -26,11 +27,11 @@ Build a graph from recursively getting recommended videos, making a interconnect
   PORT="3000"
   NETWORK_FOLDER=".networks"
   ```
-4. setup oauth, [guide](https://developers.google.com/youtube/v3/quickstart/nodejs#step_1_turn_on_the)
-5. run app and login to oauth
-6. make a request to `<api_location>/generateNewNetwork/:videoId/:depth`
+5. setup oauth, [guide](https://developers.google.com/youtube/v3/quickstart/nodejs#step_1_turn_on_the)
+6. run app and login to oauth
+7. make a request to `<api_location>/generateNewNetwork/:videoId/:depth`
 8. see the networks at `<api_location>/`
 #### if you want to host statically
-8. make folder docs/img/
-9. run `node generateStatic`
-10. host the docs folder
+9. make folder docs/img/
+10. run `node generateStatic`
+11. host the docs folder
