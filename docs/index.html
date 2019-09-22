@@ -28,7 +28,7 @@
                         id:e.id,
                         name:e.title,
                         value:1,
-                        img:e.id
+                        img:`img/${e.id}.jpg`
                     })),
                     links:data.data.connections.map(e => ({source:e.parent, target:e.child}))
                 }
