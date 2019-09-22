@@ -28,7 +28,7 @@
                         id:e.id,
                         name:e.title,
                         value:1,
-                        img:"http://cors-anywhere.herokuapp.com/" + ((e.thumbnails)?e.thumbnails.medium.url:`https://i.ibb.co/H4NzBYT/no-image-icon-5.gif`)
+                        img:e.id
                     })),
                     links:data.data.connections.map(e => ({source:e.parent, target:e.child}))
                 }
